@@ -5,9 +5,9 @@
 int main(int argc, char* argv[])
 {
     MemAllocTest();
-    /*MainService ms;
+    MainService ms;
     ms.Init();
     ms.Start();
-	ms.Join();*/
+	ms.Join();
     return 0;
 }
