@@ -23,7 +23,8 @@ public:
     void Stop();
     bool DoAccept(SocketContext* pContext);
     bool DoRecv(ConnectionSocket* pConn, SocketContext* pContext);
-
+    bool DoSend(ConnectionSocket* pConn, SocketContext* pContext);
+    bool DoClose(ConnectionSocket* pConn);
 private:
     bool InitSocket();
     bool Bind(const char* sIP, const int iPort);

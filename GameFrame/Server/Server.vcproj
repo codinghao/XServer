@@ -192,6 +192,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\Common\Message.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\Common\NetworkService.cpp"
 					>
 				</File>
@@ -250,6 +254,22 @@
 							Name="VCCustomBuildTool"
 						/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\src\Common\StreamBuffer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Common\StreamBuffer.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Common\TcpConection.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Common\TcpConnection.h"
+					>
 				</File>
 			</Filter>
 			<Filter

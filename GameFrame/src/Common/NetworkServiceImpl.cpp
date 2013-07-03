@@ -266,3 +266,15 @@ bool NetworkServiceImpl::DoRecv(ConnectionSocket* pConn, SocketContext* pContext
 
     return PostRecv(pContext);
 }
+
+bool NetworkServiceImpl::DoSend(ConnectionSocket* pConn, SocketContext* pContext)
+{
+    m_pEventHandler->OnSend();
+
+    return true;
+}
+
+bool NetworkServiceImpl::DoClose(ConnectionSocket* pConn)
+{
+    return true;
+}

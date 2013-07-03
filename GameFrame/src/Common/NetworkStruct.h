@@ -24,10 +24,9 @@ public:
     {
         m_Socket = s;
         m_NetEvent = event;
+        m_WsaBuf.buf = m_szRealBuf;
         ::memset(&m_Overlapped, 0, sizeof(OVERLAPPED));
-        ::memset(&m_szBuffer, 0, MAX_BUFFER_LEN);
-        m_wsabuf.buf = m_szBuffer;
-        m_wsabuf.len = MAX_BUFFER_LEN;
+        ::memset(m_szRealBuf, 0, sizeof(m_szRealBuf));
     }
 
     void Destory()
@@ -41,45 +40,17 @@ public:
 
     void ResetBuffer()
     {
-        ::memset(m_szBuffer, 0, MAX_BUFFER_LEN);
+        ::memset(m_szRealBuf, 0, sizeof(m_szRealBuf));
     }
-
 public:
-    OVERLAPPED     m_Overlapped;                               // 每一个重叠网络操作的重叠结构
-    SOCKET         m_Socket;                                   // 这个网络操作所使用的Socket
-    WSABUF         m_wsabuf;                                   // WSA类型的缓冲区，用于给重叠操作传参数的
-    char           m_szBuffer[MAX_BUFFER_LEN];                 // 这个是WSABUF里具体存字符的缓冲区
-    NetEvent       m_NetEvent;                                 // 标识网络操作的类型
+    OVERLAPPED     m_Overlapped; 
+    SOCKET         m_Socket;     
+    WSABUF         m_WsaBuf;
+    char           m_szRealBuf[MAX_BUFFER_LEN];
+    NetEvent       m_NetEvent; 
 };
 
 typedef ObjectPool<SocketContext> ContextPoolT;
 typedef std::list<SocketContext*> ContextListT;
-
-class ConnectionSocket
-{
-public:
-    void Init(SOCKET s)
-    {
-        m_Socket = s;
-    }
-
-    void Destory()
-    {
-        if (m_Socket != INVALID_SOCKET)
-        {
-            ::closesocket(m_Socket);
-            m_Socket = INVALID_SOCKET; 
-        }
-        
-        ContextListT::iterator it = m_ContextList.begin();
-        for (; it != m_ContextList.end(); ++ it)
-            ContextPoolT::Instance().Push(*it);
-
-        m_ContextList.clear();
-    }
-public:
-    SOCKET         m_Socket;
-    ContextListT   m_ContextList;
-};
 
 #endif
