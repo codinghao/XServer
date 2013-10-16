@@ -1,6 +1,8 @@
 #ignore directories
 /GameFrame/Server/Debug/*
 /GameFrame/Server/Release/*
+/GameFrame/Client/Debug/*
+/GameFrame/Client/Release/*
 /GameFrame/bin/*
 #ignore files
 *.ncb
