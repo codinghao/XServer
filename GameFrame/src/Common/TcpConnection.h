@@ -20,7 +20,8 @@ public:
     
     void SendMsg(Packet* pData);
 
-    const char* Ip() { return m_szIp; }
+    const char* Ip()  { return m_szIp; }
+    const short Port(){ return m_Port; }
 
 public:
     SOCKET m_Socket;    

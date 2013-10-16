@@ -15,7 +15,7 @@ public:
 	virtual TcpConnection* OnAccept(const char* ip, const short port) = 0;
 	virtual void OnSend() = 0;
 	virtual void OnRecv(TcpConnection* pConn, SocketContext* pContext) = 0;
-	virtual void OnClose() = 0;
+	virtual void OnClose(TcpConnection* pConn) = 0;
 };
 
 #endif

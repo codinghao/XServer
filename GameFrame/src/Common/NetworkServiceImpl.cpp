@@ -235,6 +235,12 @@ bool NetworkServiceImpl::DoAccept(SocketContext* pContext)
         return false;
     }
 
+    if (pContext->m_WsaBuf.len - ((sizeof(SOCKADDR_IN) + 16)*2) > 0)
+    {
+        pContext->m_WsaBuf.buf = pContext->m_szRealBuf + ((sizeof(SOCKADDR_IN) + 16)*2);
+        m_pEventHandler->OnRecv(pConn, pContext);
+    }
+
     SocketContext* pRecvContext = ContextPoolT::Instance().Pop();
     pRecvContext->Init(pConn->m_Socket, NET_RECV);
     if (!PostRecv(pRecvContext))
@@ -282,5 +288,8 @@ bool NetworkServiceImpl::DoSend(TcpConnection* pConn, SocketContext* pContext)
 
 bool NetworkServiceImpl::DoClose(TcpConnection* pConn)
 {
+    m_pEventHandler->OnClose(pConn);
+    delete pConn;
+
     return true;
 }

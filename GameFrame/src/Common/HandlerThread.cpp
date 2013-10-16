@@ -26,6 +26,7 @@ void HandlerThread::Run()
 
         if (!bRet)
         {
+            m_pServiceImpl->DoClose(pConn);
             continue;
         }
 
