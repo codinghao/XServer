@@ -4,20 +4,18 @@
 #define MAX_EVENT_HANDLE 64
 
 class SocketContext;
-class ConnectionSocket;
+class TcpConnection;
 
 class EventHandler
 {
 public:
-	EventHandler();
-	virtual ~EventHandler();
+    EventHandler() {}
+    virtual ~EventHandler() {}
 
-	virtual ConnectionSocket* OnAccept(const char* ip, const short port);
+	virtual TcpConnection* OnAccept(const char* ip, const short port) = 0;
 	virtual void OnSend() = 0;
-	virtual void OnRecv(ConnectionSocket* pConn, SocketContext* pContext) = 0;
+	virtual void OnRecv(TcpConnection* pConn, SocketContext* pContext) = 0;
 	virtual void OnClose() = 0;
-private:
-
 };
 
 #endif

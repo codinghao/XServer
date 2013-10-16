@@ -11,7 +11,7 @@ void MainService::Run()
 {
 	while(!IsShutDown())
     {
-		printf("Time : %u , Thread Running....\n", m_TimeService.CurrentTime());
+		//printf("Time : %u , Thread Running....\n", m_TimeService.CurrentTime());
         Sleep(m_TimeService.Delay());
         m_TimeService.Tick();
     }

@@ -5,7 +5,7 @@
 #include <list>
    
 class SocketContext;
-class ConnectionSocket;
+class TcpConnection;
 class EventHandler;
 class HandlerThread;
 
@@ -22,9 +22,9 @@ public:
     void Run(const char* ip, const short port);
     void Stop();
     bool DoAccept(SocketContext* pContext);
-    bool DoRecv(ConnectionSocket* pConn, SocketContext* pContext);
-    bool DoSend(ConnectionSocket* pConn, SocketContext* pContext);
-    bool DoClose(ConnectionSocket* pConn);
+    bool DoRecv(TcpConnection* pConn, SocketContext* pContext);
+    bool DoSend(TcpConnection* pConn, SocketContext* pContext);
+    bool DoClose(TcpConnection* pConn);
 private:
     bool InitSocket();
     bool Bind(const char* sIP, const int iPort);
@@ -33,10 +33,10 @@ private:
     bool PostAccept(SocketContext* pContext);
     bool PostRecv(SocketContext* pContext);
     void StartWrokThread();
-private:    
+public:    
     HANDLE m_hIoCompletionPort;
     SOCKET m_AcceptSocket;
-
+private:
     ContextListT m_ContextList;
     EventHandler* m_pEventHandler;
     ThreadListT  m_ThreadList;

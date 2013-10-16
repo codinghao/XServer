@@ -2,6 +2,7 @@
 #include "EventHandler.h"
 #include "HandlerThread.h"
 #include "NetworkStruct.h"
+#include "TcpConnection.h"
 
 #include <MSWSock.h>
 
@@ -38,13 +39,13 @@ bool NetworkServiceImpl::Init()
         fprintf(stderr, "Failed create IO completion port. Error code : %d\n", WSAGetLastError());
         return false;
     }
-    
+
     return true;
 }
 
 void NetworkServiceImpl::Run(const char* ip, const short port)
 {
-    if (!InitSocket() && !Bind(ip, port) && !Listen() && !InitSocket())
+    if (!(InitSocket() && Bind(ip, port) && Listen() && InitWinFucEx()))
     {
         return ;
     }
@@ -102,6 +103,11 @@ bool NetworkServiceImpl::InitSocket()
     {
         fprintf(stderr, "Failed init socket, error code : %d\n", WSAGetLastError());
         return false;
+    }
+
+    if (CreateIoCompletionPort((HANDLE)m_AcceptSocket, m_hIoCompletionPort, NULL, 0) == NULL)
+    {
+        fprintf(stderr, "Association socket, error code : %d\n", WSAGetLastError());
     }
 
     return true;
@@ -196,7 +202,7 @@ bool NetworkServiceImpl::PostAccept(SocketContext* pContext)
         return false;
     }
 
-    if (g_AcceptEx(m_AcceptSocket, pContext->m_Socket, pContext->m_wsabuf.buf, pContext->m_wsabuf.len - ((sizeof(SOCKADDR_IN)+16)*2),   
+    if (g_AcceptEx(m_AcceptSocket, pContext->m_Socket, pContext->m_WsaBuf.buf, pContext->m_WsaBuf.len - ((sizeof(SOCKADDR_IN)+16)*2),   
         sizeof(SOCKADDR_IN)+16, sizeof(SOCKADDR_IN)+16, &dwBytes, &pContext->m_Overlapped) == false)
     {
         if (WSAGetLastError() != ERROR_IO_PENDING)
@@ -216,10 +222,10 @@ bool NetworkServiceImpl::DoAccept(SocketContext* pContext)
     int iRemonteAddrLen = sizeof(SOCKADDR_IN);
     int iLocalAddrLen = sizeof(SOCKADDR_IN);
 
-    g_GetAcceptExSockAddrs(pContext->m_wsabuf.buf, pContext->m_wsabuf.len - ((sizeof(SOCKADDR_IN) + 16)*2),
-        sizeof(SOCKADDR_IN)+16, sizeof(SOCKADDR_IN)+16, (LPSOCKADDR*)&localAddr, &iLocalAddrLen, (LPSOCKADDR*)&iRemonteAddrLen, &iRemonteAddrLen);
+    g_GetAcceptExSockAddrs(pContext->m_WsaBuf.buf, pContext->m_WsaBuf.len - ((sizeof(SOCKADDR_IN) + 16)*2),
+        sizeof(SOCKADDR_IN)+16, sizeof(SOCKADDR_IN)+16, (LPSOCKADDR*)&localAddr, &iLocalAddrLen, (LPSOCKADDR*)&clientAddr, &iRemonteAddrLen);
     
-    ConnectionSocket* pConn = m_pEventHandler->OnAccept(inet_ntoa(clientAddr->sin_addr), ntohs(clientAddr->sin_port));
+    TcpConnection* pConn = m_pEventHandler->OnAccept(inet_ntoa(clientAddr->sin_addr), ntohs(clientAddr->sin_port));
     pConn->m_Socket = pContext->m_Socket;
 
     HANDLE hRet = CreateIoCompletionPort((HANDLE)pConn->m_Socket, m_hIoCompletionPort, (DWORD)pConn, 0);
@@ -250,7 +256,7 @@ bool NetworkServiceImpl::PostRecv(SocketContext* pContext)
 
     pContext->ResetBuffer();
 
-    int nBytesRecv = WSARecv(pContext->m_Socket, &pContext->m_wsabuf, 1, &dwBytes, &dwFlags, &pContext->m_Overlapped, NULL);
+    int nBytesRecv = WSARecv(pContext->m_Socket, &pContext->m_WsaBuf, 1, &dwBytes, &dwFlags, &pContext->m_Overlapped, NULL);
     if (nBytesRecv == SOCKET_ERROR && WSAGetLastError() != WSA_IO_PENDING)
     {
         fprintf(stderr, "Post recv failed!");
@@ -260,21 +266,21 @@ bool NetworkServiceImpl::PostRecv(SocketContext* pContext)
     return true;
 }
 
-bool NetworkServiceImpl::DoRecv(ConnectionSocket* pConn, SocketContext* pContext)
+bool NetworkServiceImpl::DoRecv(TcpConnection* pConn, SocketContext* pContext)
 {
     m_pEventHandler->OnRecv(pConn, pContext);
 
     return PostRecv(pContext);
 }
 
-bool NetworkServiceImpl::DoSend(ConnectionSocket* pConn, SocketContext* pContext)
+bool NetworkServiceImpl::DoSend(TcpConnection* pConn, SocketContext* pContext)
 {
     m_pEventHandler->OnSend();
 
     return true;
 }
 
-bool NetworkServiceImpl::DoClose(ConnectionSocket* pConn)
+bool NetworkServiceImpl::DoClose(TcpConnection* pConn)
 {
     return true;
 }

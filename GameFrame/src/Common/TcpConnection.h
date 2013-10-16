@@ -2,11 +2,14 @@
 #define _TCPCONNECTION_H_
 
 #include <Compact.h>
+#include "Message.h"
+#include "../Common/StreamBuffer.h"
+#include "NetworkStruct.h"
 
 class TcpConnection
 {
 public:
-    TcpConnection(SOCKET s, const char* ip, const short port);
+    TcpConnection(const char* ip, const short port);
     virtual ~TcpConnection();
     void AsyncSend();
     void AsyncRecv();
@@ -16,11 +19,16 @@ public:
     void OnRecv(SocketContext* pContext);
     
     void SendMsg(Packet* pData);
-private:
-    SOCKET m_Socket;
-    char   m_szIp[MAX_IP_LENGTH];
-    short  m_Port;
+
+    const char* Ip() { return m_szIp; }
+
+public:
+    SOCKET m_Socket;    
     ContextListT m_ContextList;
+private:
+    char   m_szIp[16];
+    short  m_Port;
+
     StreamBuffer m_InputStream;
     StreamBuffer m_OutputStream;
 };

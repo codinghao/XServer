@@ -18,7 +18,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="..\bin\Debug"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
@@ -41,6 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="..\src\Common"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -165,6 +166,106 @@
 	<References>
 	</References>
 	<Files>
+		<Filter
+			Name="Common"
+			>
+			<File
+				RelativePath="..\src\Common\Atomic.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Common\Compact.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Common\DateTime.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Common\DateTime.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Common\Logger.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Common\Logger.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Common\MemAlloc.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Common\Message.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Common\Mutex.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Common\Mutex.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Common\ObjectPool.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Common\Singleton.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Common\Thread.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Common\Thread.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Common\TimeService.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Common\TimeService.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Common\TinyXml.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Common\TinyXml.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Common\TinyXmlError.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Common\TinyXmlParser.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Common\Utils.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="main"
+			>
+			<File
+				RelativePath="..\src\Client\ClientMain.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Client\Connection.h"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

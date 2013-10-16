@@ -18,8 +18,8 @@ public:
     void AllocPacket(Packet* pData);
     void DeallocPacket(Packet* pData);
 
-    Packet* Read();
-    void Read(char* pData, int& nLen);
+    void Read(Packet* pData);
+    void Read(char* pData, ulong& nLen);
     void Write(char* pData, int nLen);
     void Write(Packet* pData);
 

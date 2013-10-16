@@ -4,6 +4,7 @@
 #include "Compact.h"
 #include "Singleton.h"
 #include "ObjectPool.h"
+#include <list>
 
 #define MAX_BUFFER_LEN 4096
 #define MAX_POST_ACCEPT 10
@@ -25,6 +26,7 @@ public:
         m_Socket = s;
         m_NetEvent = event;
         m_WsaBuf.buf = m_szRealBuf;
+        m_WsaBuf.len = MAX_BUFFER_LEN;
         ::memset(&m_Overlapped, 0, sizeof(OVERLAPPED));
         ::memset(m_szRealBuf, 0, sizeof(m_szRealBuf));
     }

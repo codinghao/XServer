@@ -176,10 +176,6 @@
 				Name="NetWork"
 				>
 				<File
-					RelativePath="..\src\Common\EventHandler.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\src\Common\EventHandler.h"
 					>
 				</File>
@@ -370,6 +366,10 @@
 			</File>
 			<File
 				RelativePath="..\src\Server\MainService.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\Server\MsgHandler.h"
 				>
 			</File>
 			<File
