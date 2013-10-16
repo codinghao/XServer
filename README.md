@@ -1,4 +1,4 @@
 XServer
 =======
 
-A MMORPG game server
+A Simple server
