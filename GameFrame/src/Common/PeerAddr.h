@@ -1,5 +1,5 @@
-#ifndef _TCP_ADDR_H_
-#define _TCP_ADDR_H_
+#ifndef _PEER_ADDR_H_
+#define _PEER_ADDR_H_
 
 class PeerAddr
 {
