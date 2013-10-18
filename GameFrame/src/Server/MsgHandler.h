@@ -43,6 +43,8 @@ void MsgHandler::OnRecv(TcpConnection* pConn, SocketContext* pContext)
 
 void MsgHandler::OnClose(TcpConnection* pConn)
 {
+    if (pConn == NULL) {   return ;  }
+
     std::cout << "Client close IP[" << pConn->Ip() << "]" << "PORT[" << pConn->Port() << "]" << std::endl;
 }
 

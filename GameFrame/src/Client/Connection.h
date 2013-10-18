@@ -54,7 +54,7 @@ public:
         if (::send(m_Scoket, _buf, _len, 0) == SOCKET_ERROR)
         {
             std::cerr << "send error : " << WSAGetLastError() << std::endl;
-            return false
+            return false;
         }
 
         return true;
