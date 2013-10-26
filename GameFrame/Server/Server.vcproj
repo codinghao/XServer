@@ -316,6 +316,22 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Proactor"
+				>
+				<File
+					RelativePath="..\src\Common\Proactor\BaseFrame.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Common\Delegate.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Common\Proactor\EventHandler.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Main"
