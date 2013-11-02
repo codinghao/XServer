@@ -1,52 +1,47 @@
 #pragma once
 
-enum EventType
-{
+enum EventType {
     ACCEPT = 0x01,
     READ   = 0x02,
     WRITE  = 0x03
 };
 
-typedef struct _Buffer 
-{
+typedef struct _Buffer {
     char* m_Buffer;
     int   m_Len;
 }Buffer;
 
-typedef struct _WinIO
-{
+typedef struct _WinIO {
     OVERLAPPED m_Overlapped;
     Socket*    m_Socket;
     Buffer     m_Buffer;
-    EventType  m_OpType;
 }WinIO;
 
-typedef void (*AcceptFunc)(Socket* _socket, char* _buffer, int _bytes);
-typedef void (*ReadFunc)(char* _buffer, int _bytes);
-typedef void (*WriteFunc)(char* _buffer, int _bytes);
+typedef Delegate<void (Socket*, char*, int)> AcceptEvent;
+typedef Delegate<void (char*, int)> ReadEvent;
+typedef Delegate<void (char*, int)> WriteEvent;
 
 class Socket
 {
 public:
-    Socket(Proactor& _proactor)
+    Socket(Proactor* _proactor)
         : m_Proactor(_proactor)
     {
 
     }
 
-    void AsyncRead(ReadFunc* _readFunc, const Buffer& _buffer)
+    void AsyncRead(ReadEvent* _event, const Buffer& _buffer)
     {
-        m_Proactor.RegisterRead(this, _readFunc);
-        m_Proactor.PostRead();
+        m_Proactor->PostRead(_event, _buffer);
     }
 
-    void AsyncWrite(WriteFunc* _writeFunc, char* _buffer, int _len)
+    void AsyncWrite(WriteEvent* _event, const Buffer& _buffer)
     {
-
+        m_Proactor->PostWrite(_event, _buffer);
     }
 
 private:
-    Proactor& m_Proactor;
+    Proactor* m_Proactor;
 };
 
 class Dispatcher
@@ -59,27 +54,17 @@ class Proactor
 {
 public:
     bool Open();
-
-    void RegisterAccept(AcceptFunc _acceptFunc);
-    void RegisterRead(Socket* _socket, ReadFunc _readFunc);
-    void RegisterWrite(Socket* _socket, WriteFunc _writeFunc);
-
     void Run();
 
     void PostAccept();
-    void PostRead(Socket* _socket);
-    void PostWrite();
-
-private:
-    AcceptFunc m_Accepted;
-    ReadFunc m_Read;
-    WriteFunc m_Write;
+    void PostRead(ReadEvent* _event, const Buffer& _buffer);
+    void PostWrite(WriteEvent* _event, const Buffer& _buffer);
 };
 
 class Acceptor
 {
 public:
-    Acceptor(Proactor& _proactor)
+    Acceptor(Proactor* _proactor)
         : m_Proactor(_proactor)
     {
     }
@@ -87,5 +72,6 @@ public:
     void AsyncAccept();
 
 private:
-    Proactor& m_Proactor;
+    Socket*   m_Socket;
+    Proactor* m_Proactor;
 };

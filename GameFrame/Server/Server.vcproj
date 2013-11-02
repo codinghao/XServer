@@ -252,6 +252,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\Common\Delegate.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Common\DelegateImpl.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\Common\Logger.cpp"
 					>
 				</File>
@@ -324,11 +332,23 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\Common\Delegate.h"
+					RelativePath="..\src\Common\Proactor\EventHandler.h"
 					>
 				</File>
 				<File
-					RelativePath="..\src\Common\Proactor\EventHandler.h"
+					RelativePath="..\src\Common\Proactor\NoneCopyable.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Common\Proactor\Operation.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Common\Proactor\Service.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Common\Proactor\WinSockStart.h"
 					>
 				</File>
 			</Filter>
