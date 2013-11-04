@@ -328,6 +328,10 @@
 				Name="Proactor"
 				>
 				<File
+					RelativePath="..\src\Common\Proactor\Accpetor.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\Common\Proactor\BaseFrame.h"
 					>
 				</File>
@@ -345,6 +349,10 @@
 				</File>
 				<File
 					RelativePath="..\src\Common\Proactor\Service.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Common\Proactor\Socket.h"
 					>
 				</File>
 				<File

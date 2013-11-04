@@ -50,7 +50,7 @@ public:
 class WriteOperation : public Operation
 {
 public:
-    WriteOperation(Socket* _socket, const Buffer& _buffer, ReadHandler* _handler)
+    WriteOperation(Socket* _socket, const Buffer& _buffer, WriteHandler* _handler)
         : Operation(DoCompletion)
         , m_Socket(_socket)
         , m_Buffer(_buffer)
@@ -73,8 +73,11 @@ public:
 class AcceptOperation : public Operation
 {
 public:
-    AcceptOperation()
+    AcceptOperation(Socket* _socket, const Buffer& _buffer, AcceptHandler* _handler)
         : Operation(DoCompletion)
+        , m_Socket(_socket)
+        , m_Buffer(_buffer)
+        , m_Handler(_handler)
     {
     }
 

@@ -1,7 +1,7 @@
-#ifndef _PROACTOR_H_
-#define _PROACTOR_H_
+#ifndef _SERVICE_H_
+#define _SERVICE_H_
 
-#define SAFE_DELETE_HANDLE(handle) if (handle != NULL) { CloseHandle(handle); handle = NULL; }
+#define SAFE_DELETE_HANDLE(handle) if (handle != NULL) { ::CloseHandle(handle); handle = NULL; }
 
 class IoCompletionPortHandle
 {
@@ -23,7 +23,7 @@ public:
 
     bool AssociateIoCompletionPort(HANDLE _fileHandle, ULONG_PTR _completionKey = NULL, int _threadNum = 0)
     {
-        if (CreateIoCompletionPort(_fileHandle, m_Hanlde, _completionKey, 0) == NULL)
+        if (CreateIoCompletionPort(_fileHandle, m_Hanlde, _completionKey, _threadNum) == NULL)
         {
             fprintf(stderr, "Association socket, error code : %d\n", WSAGetLastError());
             return false;
@@ -52,6 +52,33 @@ private:
 class Service : public NoneCopyable
 {
 public:
+    Service()
+    {}
+    ~Service()
+    {}
+
+    void ServiceRun()
+    {
+        DWORD nBytesTransferred = 0;
+        LPOVERLAPPED pOverLapped = NULL;
+        PULONG_PTR pCompletionKey = NULL;
+
+        while(true)
+        {
+            ::WSASetLastError(0);
+
+            bool ok = ::GetQueuedCompletionStatus(m_ServiceHandle.GetHandle(), pCompletionKey, &pOverLapped, INFINITE);
+            if (!ok && pOverLapped == NULL)
+            {
+                continue ;
+            }
+            
+            DWORD errorCode = ::WSAGetLastError();
+
+            Operation* pOperation = static_cast<Operation*>(pOverLapped);
+            pOperation->DoInvoke(nBytesTransferred, errorCode);
+        }
+    }
 
 private:
     IoCompletionPortHandle m_ServiceHandle;

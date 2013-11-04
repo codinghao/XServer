@@ -9,9 +9,7 @@ class Socket
 {
 public:
     Socket()
-    {
-
-    }
+    {}
 
     ~Socket()
     {
@@ -46,7 +44,7 @@ public:
         buf.len = _buffer.m_Len;
 
         WriteOperation *writeOp = new WriteOperation(this, _buffer, _handler);
-        int ret = WSASend(m_Socket, &buf, 1, &bytes, &flags, (LPOVERLAPPED), NULL);
+        int ret = WSASend(m_Socket, &buf, 1, &bytes, &flags, (LPOVERLAPPED)writeOp, NULL);
         if (ret == SOCKET_ERROR && WSAGetLastError() != WSA_IO_PENDING)
         {
             fprintf(stderr, "Asynchronous write to socket error. Error code %d.\n", WSAGetLastError());
