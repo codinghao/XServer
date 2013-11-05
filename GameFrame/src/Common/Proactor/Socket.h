@@ -9,7 +9,13 @@ class Socket
 {
 public:
     Socket()
-    {}
+    {
+        m_Socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
+        if (m_Socket == INVALID_SOCKET)
+        {
+            fprintf(stderr, "Create socket failed, error code %d.\n", WSAGetLastError());
+        }
+    }
 
     ~Socket()
     {
@@ -54,6 +60,7 @@ public:
         return true;
     }
 
+    void SetPeerAddr(const PeerAddr& _peerAddr){ m_PeerAddr = _peerAddr; }
     SOCKET GetSocket() { return m_Socket;         }
     const char* GetIp(){ return m_PeerAddr.Ip();  }
     ushort GetPort()   { return m_PeerAddr.Port();}

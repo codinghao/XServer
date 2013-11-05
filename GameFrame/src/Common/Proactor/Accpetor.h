@@ -5,10 +5,10 @@
 
 #define SOCKADDR_LENGTH ((sizeof(SOCKADDR_IN) + 16)
 
-class Acceptor
+class AcceptorImpl
 {
 public:
-    Acceptor(Service* _service)
+    AcceptorImpl(Service* _service)
         : m_Socket(new Socket())
         , m_Service(_service)
     {
@@ -36,6 +36,11 @@ public:
         return true;
     }
 
+    void IoctlFuncInit()
+    {
+        IoctlFuncSet::IoctlInitFunc(m_Socket->GetSocket());
+    }
+
     void AsyncAccept(Socket* _socket, AcceptHandler* _handler, const Buffer& _buffer)
     {
         DWORD dwBytes = 0;
@@ -57,6 +62,29 @@ public:
 private:
     Socket*   m_Socket;
     Service*  m_Service;
+};
+
+class Acceptor
+{
+public:
+    Acceptor(Service* _service, const PeerAddr _peerAddr)
+        : m_AcceptorImpl(new AcceptorImpl(_service))
+    {
+        m_AcceptorImpl->Bind(_peerAddr);
+        m_AcceptorImpl->Listen();
+        m_AcceptorImpl->IoctlFuncInit();
+    }
+
+    ~Acceptor()
+    {
+    }
+
+    void AsyncAccept(Socket* _socket, AcceptHandler* _handler, const Buffer& _buffer)
+    {
+        m_AcceptorImpl->AsyncAccept(_socket, _handler, _buffer);
+    }
+private:
+    AcceptorImpl* m_AcceptorImpl;
 };
 
 #endif

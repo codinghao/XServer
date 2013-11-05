@@ -340,6 +340,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\Common\Proactor\IoctlFuncSet.h"
+					>
+				</File>
+				<File
 					RelativePath="..\src\Common\Proactor\NoneCopyable.h"
 					>
 				</File>

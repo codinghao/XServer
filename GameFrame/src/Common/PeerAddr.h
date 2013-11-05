@@ -11,6 +11,11 @@ public:
         m_Addr.sin_port = ::htons(_port);
     }
 
+    PeerAddr(const struct sockaddr_in& _sockAddr)
+    {
+        m_Addr = _sockAddr;
+    }
+
     const sockaddr* operator()()
     {
         return (sockaddr*)&m_Addr;
