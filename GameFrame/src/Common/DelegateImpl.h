@@ -1,5 +1,3 @@
-#ifndef _DELEGATE_IMPL_H_
-#define _DELEGATE_IMPL_H_
 
 #define TEMPLETES_PARAM MAKE_PARAM1_N(DELEGATE_PARAM_NUM, class T)
 #define TEMPLETES_ARG   MAKE_PARAM1_N(DELEGATE_PARAM_NUM, T)
@@ -71,6 +69,12 @@ private:
     }
 
 public:
+    Delegate()
+        : m_pImpl(NULL)
+    {
+
+    }
+
     template<class T, class TFunctor>
     Delegate(const T& _obj, const TFunctor& _functor)
         : m_pImpl(new DelegateImpl<std::pair<T, TFunctor>>(std::make_pair(_obj, _functor)))
@@ -136,4 +140,7 @@ private:
     DelegateImplBase* m_pImpl;
 };
 
-#endif
+#undef TEMPLETES_PARAM
+#undef TEMPLETES_ARG
+#undef FUNCTIONS_PARAM
+#undef FUNCTIONS_ARG

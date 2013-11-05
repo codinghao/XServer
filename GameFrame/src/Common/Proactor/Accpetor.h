@@ -1,88 +1,21 @@
 #ifndef _ACCEPTOR_H_
 #define _ACCEPTOR_H_
 
-#include "Operation.h"
+#include "PeerAddr.h"
+#include "Buffer.h"
+#include "..\Delegate.h"
 
-#define SOCKADDR_LENGTH ((sizeof(SOCKADDR_IN) + 16)
+class Socket;
+typedef Delegate<void (Socket* /*_socket*/, Buffer* /*_buffer*/, int /*_errorCode*/)> AcceptHandler;
 
-class AcceptorImpl
-{
-public:
-    AcceptorImpl(Service* _service)
-        : m_Socket(new Socket())
-        , m_Service(_service)
-    {
-    }
-
-    bool Bind(const PeerAddr& _peerAddr)
-    {
-        if (bind(m_Socket->GetSocket(), _peerAddr(), sizeof(_peerAddr)) == SOCKET_ERROR)
-        {
-            fprintf(stderr, "Failed bind address %s, port %d, error code %d\n", _peerAddr.Ip(), _peerAddr.Port(), WSAGetLastError());
-            return false;
-        }
-
-        return true;
-    }
-
-    bool Listen()
-    {
-        if (listen(m_Socket->GetSocket(), SOMAXCONN) == SOCKET_ERROR)
-        {
-            fprintf(stderr, "Failed listen, error code : %d\n", WSAGetLastError());
-            return false;
-        }
-
-        return true;
-    }
-
-    void IoctlFuncInit()
-    {
-        IoctlFuncSet::IoctlInitFunc(m_Socket->GetSocket());
-    }
-
-    void AsyncAccept(Socket* _socket, AcceptHandler* _handler, const Buffer& _buffer)
-    {
-        DWORD dwBytes = 0;
-
-        AcceptOperation* acceptOp = new AcceptOperation(_socket, _buffer, _handler);
-        if (!IoctlFuncSet::AcceptEx(m_Socket->GetSocket(), _socket->GetSocket(), _buffer.m_Buffer, _buffer.m_Len - SOCKADDR_LENGTH*2),   
-            SOCKADDR_LENGTH, SOCKADDR_LENGTH, &dwBytes, (LPOVERLAPPED)acceptOp))
-        {
-            DWORD errorCode = WSAGetLastError();
-            if (errorCode != ERROR_IO_PENDING)
-            {
-                delete acceptOp;
-                fprintf(stderr, "Post AcceptEx request failed, error code : %d", errorCode);
-                return ;
-            }
-        }
-    }
-
-private:
-    Socket*   m_Socket;
-    Service*  m_Service;
-};
-
+class Service;
+class AcceptorImpl;
 class Acceptor
 {
 public:
-    Acceptor(Service* _service, const PeerAddr _peerAddr)
-        : m_AcceptorImpl(new AcceptorImpl(_service))
-    {
-        m_AcceptorImpl->Bind(_peerAddr);
-        m_AcceptorImpl->Listen();
-        m_AcceptorImpl->IoctlFuncInit();
-    }
-
-    ~Acceptor()
-    {
-    }
-
-    void AsyncAccept(Socket* _socket, AcceptHandler* _handler, const Buffer& _buffer)
-    {
-        m_AcceptorImpl->AsyncAccept(_socket, _handler, _buffer);
-    }
+    Acceptor(Service* _service, PeerAddr& _peerAddr);
+    ~Acceptor();
+    void AsyncAccept(Socket* _socket, AcceptHandler* _handler, const Buffer& _buffer);
 private:
     AcceptorImpl* m_AcceptorImpl;
 };

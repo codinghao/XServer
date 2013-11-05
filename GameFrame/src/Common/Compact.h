@@ -8,7 +8,9 @@
     #include <WinSock2.h>
 	#include <Windows.h>
 	#include <crtdbg.h>
+    #include <MSWSock.h>
     #pragma comment ( lib, "winmm.lib" )
+    #pragma comment(lib,"ws2_32.lib")
 #endif
 
 #include <stdio.h>

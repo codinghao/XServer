@@ -1,22 +1,29 @@
 #ifndef _OPERATOR_H_
 #define _OPERATOR_H_
 
-typedef void (InvokeFunc*)(Operation* _this, int _transferBytes, int _errorCode);
+#include "Socket.h"
 
-typedef Delegate<void (Buffer* /*_buffer*/, int /*_errorCode*/)> ReadHandler;
-typedef Delegate<void (Buffer* /*_buffer*/, int /*_errorCode*/)> WriteHandler;
-typedef Delegate<void (Socket* /*_socket*/, Buffer* /*_buffer*/, int /*_errorCode*/)> AcceptHandler;
+class Operation;
+
+typedef void (*InvokeFunc)(Operation* _this, int _transferBytes, int _errorCode);
 
 class Operation : public OVERLAPPED 
 {
 public:
-    Operation(InvokeFunc& _invokeFunc)
+    Operation(InvokeFunc _invokeFunc)
         : m_InvokeFunc(_invokeFunc)
+    {
+        Internal = 0;
+        InternalHigh = 0;
+        Offset = 0;
+        OffsetHigh = 0;
+        hEvent = 0;
+    }
+
+    ~Operation()
     {}
 
-    ~Operation();
-
-    void DoInvoke(int _transferBytes, int _errorCode)
+    void DoInvoke(int _transferBytes, int _errorCode) 
     {
         m_InvokeFunc(this, _transferBytes, _errorCode);
     }
@@ -28,19 +35,8 @@ private:
 class ReadOperation : public Operation
 {
 public:
-    ReadOperation(Socket* _socket, const Buffer& _buffer, ReadHandler* _handler)
-        : Operation(DoCompletion)
-        , m_Socket(_socket)
-        , m_Buffer(_buffer)
-        , m_Handler(_handler)
-    {
-    }
-    
-    static void DoCompletion(Operation* _this, int _transferBytes, int _errorCode)
-    {
-        _this->m_Buffer.len = _transferBytes;
-        (*(_this->m_Handler))(&m_Buffer, _errorCode);
-    }
+    ReadOperation(Socket* _socket, const Buffer& _buffer, ReadHandler* _handler);
+    static void DoCompletion(Operation* _this, int _transferBytes, int _errorCode);
 public:
     Socket* m_Socket;
     Buffer  m_Buffer;
@@ -50,20 +46,8 @@ public:
 class WriteOperation : public Operation
 {
 public:
-    WriteOperation(Socket* _socket, const Buffer& _buffer, WriteHandler* _handler)
-        : Operation(DoCompletion)
-        , m_Socket(_socket)
-        , m_Buffer(_buffer)
-        , m_Handler(_handler)
-    {
-
-    }
-
-    static void DoCompletion(Operation* _this, int _transferBytes, int _errorCode)
-    {
-        _this->m_Buffer.len = _transferBytes;
-        (*(_this->m_Handler))(&m_Buffer, _errorCode);
-    }
+    WriteOperation(Socket* _socket, const Buffer& _buffer, WriteHandler* _handler);
+    static void DoCompletion(Operation* _this, int _transferBytes, int _errorCode);
 public:
     Socket* m_Socket;
     Buffer  m_Buffer;
@@ -73,19 +57,8 @@ public:
 class AcceptOperation : public Operation
 {
 public:
-    AcceptOperation(Socket* _socket, const Buffer& _buffer, AcceptHandler* _handler)
-        : Operation(DoCompletion)
-        , m_Socket(_socket)
-        , m_Buffer(_buffer)
-        , m_Handler(_handler)
-    {
-    }
-
-    static void DoCompletion(Operation* _this, int _transferBytes, int _errorCode)
-    {
-        _this->m_Buffer.len = _transferBytes;
-        (*(_this->m_Handler))(m_Socket, &m_Buffer, _errorCode);
-    }
+    AcceptOperation(Socket* _socket, const Buffer& _buffer, AcceptHandler* _handler);
+    static void DoCompletion(Operation* _this, int _transferBytes, int _errorCode);
 public:
     Socket* m_Socket;
     Buffer  m_Buffer;

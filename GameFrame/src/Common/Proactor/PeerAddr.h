@@ -1,9 +1,15 @@
 #ifndef _PEER_ADDR_H_
 #define _PEER_ADDR_H_
 
+#include "../Compact.h"
+
 class PeerAddr
 {
 public:
+    PeerAddr()
+    {
+
+    }
     PeerAddr(const char* _ip, ushort _port, ushort _family = AF_INET)
     {
         m_Addr.sin_family = _family;
@@ -16,14 +22,14 @@ public:
         m_Addr = _sockAddr;
     }
 
-    const sockaddr* operator()()
+    sockaddr* operator()()
     {
         return (sockaddr*)&m_Addr;
     }
 
     const char* Ip() 
     {
-        return inet_ntoa(m_Addr);
+        return inet_ntoa(*(in_addr*)&m_Addr);
     }
 
     const ushort Port()

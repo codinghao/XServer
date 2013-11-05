@@ -1,20 +1,19 @@
 #include "Compact.h"
 #include "MainService.h"
 #include "UnitTest.h"
-#include "NetworkService.h"
-#include "MsgHandler.h"
+
+#include "./Proactor/Service.h"
+#include "./Proactor/NetWork.h"
+#include "./Proactor/WinSockStart.h"
 
 int main(int argc, char* argv[])
 {
     //MemAllocTest();
 
-    MsgHandler handler;
-    NetworkService service(&handler);
-    service.Init();
-    service.Run("0.0.0.0", 6020);
-    MainService ms;
-    ms.Init();
-    ms.Start();
-	ms.Join();
+    Service service;
+    TcpServer server(&service, PeerAddr("0.0.0.0", 6020));
+
+    service.ServiceRun();
+
     return 0;
 }
