@@ -1,6 +1,8 @@
 #ifndef _BUFFER_H_
 #define _BUFFER_H_
 
+#define BUFFER_SIZE 4096
+
 typedef struct _Buffer {
     _Buffer(char* _buf, int _len)
         : m_Buffer(_buf)

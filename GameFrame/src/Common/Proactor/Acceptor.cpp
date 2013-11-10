@@ -17,3 +17,8 @@ void Acceptor::AsyncAccept(Socket* _socket, AcceptHandler* _handler, const Buffe
 {
     m_AcceptorImpl->AsyncAccept(_socket, _handler, _buffer);
 }
+
+void Acceptor::GetAcceptExSockAddrs(Socket* _socket, const Buffer& _buffer)
+{
+    m_AcceptorImpl->GetAcceptExSockAddrs(_socket, _buffer);
+}

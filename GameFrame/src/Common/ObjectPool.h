@@ -96,6 +96,28 @@ class ObjectPoolWithLock
         AutoLock(m_Mutex);
         m_pImpl->Pop(); 
     }
+
+    template<class Arg1>
+    T* Pop(Arg1 p1)
+    {
+        AutoLock(m_Mutex);
+        m_pImpl->Pop(p1);
+    }
+
+    template<class Arg1, class Arg2, class Arg3>
+    T* Pop(Arg1 p1, Arg2 p2, Arg3 p3)
+    {
+        AutoLock(m_Mutex);
+        m_pImpl->Pop(p1, p2, p3);
+    }
+
+    template<class Arg1, class Arg2>
+    T* Pop(Arg1 p1, Arg2 p2)
+    {
+        AutoLock(m_Mutex);
+        m_pImpl->Pop(p1, p2);
+    }
+
     void Push(T* p) 
     {
         AutoLock(m_Mutex);

@@ -15,10 +15,13 @@ public:
     bool Listen();
     bool InitAcceptEx();
     void AsyncAccept(Socket* _socket, AcceptHandler* _handler, const Buffer& _buffer);
+    void GetAcceptExSockAddrs(Socket* _socket, const Buffer& _buffer);
 private:
     Socket*   m_Socket;
     Service*  m_Service;
     AcceptExFunctor m_AcceptEx;
+    GetAcceptExSockaddrsFunctor m_GetSockAddr;
+    ObjectPoolWithLock<AcceptOperation> m_AcceptPool;
 };
 
 #endif

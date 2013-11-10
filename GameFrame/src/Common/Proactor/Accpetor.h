@@ -16,6 +16,8 @@ public:
     Acceptor(Service* _service, PeerAddr& _peerAddr);
     ~Acceptor();
     void AsyncAccept(Socket* _socket, AcceptHandler* _handler, const Buffer& _buffer);
+
+    void GetAcceptExSockAddrs(const Buffer& _buffer);
 private:
     AcceptorImpl* m_AcceptorImpl;
 };

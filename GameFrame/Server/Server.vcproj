@@ -212,18 +212,6 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\src\Common\Message.h"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath="..\src\Common\NetworkService.cpp"
 					>
 					<FileConfiguration
@@ -284,30 +272,6 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\src\Common\StreamBuffer.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\src\Common\StreamBuffer.h"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCustomBuildTool"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath="..\src\Common\TcpConection.cpp"
 					>
 					<FileConfiguration
@@ -335,6 +299,10 @@
 			<Filter
 				Name="os"
 				>
+				<File
+					RelativePath="..\src\Common\Atomic.cpp"
+					>
+				</File>
 				<File
 					RelativePath="..\src\Common\Atomic.h"
 					>
@@ -462,7 +430,15 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\src\Common\Proactor\NetWork.h"
+					RelativePath="..\src\Common\Proactor\ConnectionManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Common\Proactor\ConnectionManager.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Common\Message.h"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -531,6 +507,44 @@
 							Name="VCCustomBuildTool"
 						/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\src\Common\StreamBuffer.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\src\Common\StreamBuffer.h"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\src\Common\Proactor\TcpConnection.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Common\Proactor\TcpConnection.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Common\Proactor\TcpServer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Common\Proactor\TcpServer.h"
+					>
 				</File>
 				<File
 					RelativePath="..\src\Common\Proactor\WinFunctor.h"
