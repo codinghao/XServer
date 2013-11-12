@@ -3,6 +3,8 @@
 
 #include "../Compact.h"
 
+#define PEER_ADDR_SIZE sizeof(sockaddr_in)
+
 class PeerAddr
 {
 public:
@@ -29,7 +31,7 @@ public:
 
     const char* Ip() 
     {
-        return inet_ntoa(*(in_addr*)&m_Addr);
+        return inet_ntoa(m_Addr.sin_addr);
     }
 
     const ushort Port()

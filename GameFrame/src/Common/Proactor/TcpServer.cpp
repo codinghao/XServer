@@ -1,10 +1,13 @@
 #include "TcpServer.h"
+#include "TcpConnection.h"
+#include "Accpetor.h"
+#include "MemAlloc.h"
 
 TcpServer::TcpServer(Service* _service, PeerAddr& _peerAddr)
     : m_Acceptor(new Acceptor(_service, _peerAddr))
 {
     m_AcceptHandler = AcceptHandler(this, &TcpServer::OnAccept);
-    m_Acceptor->AsyncAccept((Socket*)m_ConnPool.Pop(), &m_AcceptHandler, Buffer((char*)MemAllocT.Alloc(BUFFER_SIZE), BUFFER_SIZE));
+    m_Acceptor->AsyncAccept((Socket*)m_ConnectionManager.CreateTcpConnnectionFanctory(), &m_AcceptHandler, Buffer((char*)MemAllocT.Alloc(BUFFER_SIZE), BUFFER_SIZE));
 }
 
 TcpServer::~TcpServer()
@@ -17,8 +20,13 @@ TcpServer::~TcpServer()
 
 void TcpServer::OnAccept(Socket* _socket, Buffer* _buffer, int _errorCode)
 {
-    m_Acceptor->GetAcceptExSockAddrs(_buffer, _socket);
+    m_Acceptor->OnAccepted(_socket, *_buffer, _errorCode);
+
+    std::cout << "Accepted : " << _socket->GetIp() << " " << _socket->GetPort() << std::endl;
 
     TcpConnection* pConn = (TcpConnection*)_socket;
-    pConn->OnRead(_socket, _buffer)
+    m_ConnectionManager.AddTcpConnection(pConn);
+    pConn->OnRead(_socket, _buffer, _errorCode);
+
+    m_Acceptor->AsyncAccept((Socket*)new TcpConnection(), &m_AcceptHandler, Buffer((char*)MemAllocT.Alloc(BUFFER_SIZE), BUFFER_SIZE));
 }

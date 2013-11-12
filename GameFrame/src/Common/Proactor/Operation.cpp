@@ -1,7 +1,5 @@
-#include "Operation.h"
-#include "Socket.h"
+#include "OperatorSet.h"
 #include "Buffer.h"
-
 
 ReadOperation::ReadOperation(Socket* _socket, const Buffer& _buffer, ReadHandler* _handler)
     : Operation(DoCompletion)
@@ -19,6 +17,11 @@ void ReadOperation::DoCompletion(Operation* _this, int _transferBytes, int _erro
     (*(readOp->m_Handler))(readOp->m_Socket, &(readOp->m_Buffer), _errorCode);
 }
 
+void ReadOperation::DoDestory(Operation* _this, int _errorCode)
+{
+
+}
+
 WriteOperation::WriteOperation(Socket* _socket, const Buffer& _buffer, WriteHandler* _handler)
     : Operation(DoCompletion)
     , m_Socket(_socket)
@@ -32,6 +35,11 @@ void WriteOperation::DoCompletion(Operation* _this, int _transferBytes, int _err
 
     writeOp->m_Buffer.m_Len = _transferBytes;
     (*(writeOp->m_Handler))(writeOp->m_Socket, &writeOp->m_Buffer, _errorCode);
+}
+
+void WriteOperation::DoDestory(Operation* _this, int _errorCode)
+{
+
 }
 
 AcceptOperation::AcceptOperation(Socket* _socket, const Buffer& _buffer, AcceptHandler* _handler)
@@ -48,4 +56,9 @@ void AcceptOperation::DoCompletion(Operation* _this, int _transferBytes, int _er
 
     acceptOp->m_Buffer.m_Len = _transferBytes;
     (*(acceptOp->m_Handler))(acceptOp->m_Socket, &acceptOp->m_Buffer, _errorCode);
+}
+
+void AcceptOperation::DoDestory(Operation* _this, int _errorCode)
+{
+
 }

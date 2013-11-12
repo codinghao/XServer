@@ -24,14 +24,18 @@ void Socket::AsyncRead(ReadHandler* _handler, const Buffer& _buffer)
 
     WSABUF buf;
     buf.buf = _buffer.m_Buffer;
-    buf.len = _buffer.m_Len;
+    buf.len = _buffer.m_MaxLen;
 
-    ReadOperation *readOp = new ReadOperation(this, _buffer, _handler);
+    Operation *readOp = m_OperationManager.CreateReadOperationFactory(this, _buffer, _handler);
     int ret = WSARecv(m_Socket, &buf, 1, &bytes, &flags, (LPOVERLAPPED)readOp, NULL);
-    if (ret == SOCKET_ERROR && WSAGetLastError() != WSA_IO_PENDING)
+    if (ret == SOCKET_ERROR)
     {
-        fprintf(stderr, "Asynchronous read from socket error. Error code %d.\n", WSAGetLastError());
-        delete readOp;
+        DWORD errorCode = WSAGetLastError();
+        if (errorCode != WSA_IO_PENDING)
+        {
+            m_OperationManager.OnDestory(readOp, errorCode);
+            fprintf(stderr, "Asynchronous read from socket error. Error code %d.\n", errorCode);
+        }
     }
 }
 
@@ -41,13 +45,22 @@ void Socket::AsyncWrite(WriteHandler* _handler, const Buffer& _buffer)
 
     WSABUF buf;
     buf.buf = _buffer.m_Buffer;
-    buf.len = _buffer.m_Len;
+    buf.len = _buffer.m_MaxLen;
 
-    WriteOperation *writeOp = new WriteOperation(this, _buffer, _handler);
+    Operation *writeOp = m_OperationManager.CreateWriteOperationFactory(this, _buffer, _handler);
     int ret = WSASend(m_Socket, &buf, 1, &bytes, flags, (LPOVERLAPPED)writeOp, NULL);
-    if (ret == SOCKET_ERROR && WSAGetLastError() != WSA_IO_PENDING)
+    if (ret == SOCKET_ERROR)
     {
-        fprintf(stderr, "Asynchronous write to socket error. Error code %d.\n", WSAGetLastError());
-        delete writeOp;
+        DWORD errorCode = WSAGetLastError();
+        if (errorCode != WSA_IO_PENDING)
+        {
+            m_OperationManager.OnDestory(writeOp, errorCode);
+            fprintf(stderr, "Asynchronous write to socket error. Error code %d.\n", errorCode);
+        }
     }
+}
+
+void Socket::Close()
+{
+    SAFE_DELETE_SOCKET(m_Socket);
 }

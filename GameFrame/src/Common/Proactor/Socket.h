@@ -3,13 +3,7 @@
 
 #include "PeerAddr.h"
 #include "Buffer.h"
-#include "..\Delegate.h"
-
-class Socket;
-
-typedef Delegate<void (Socket* /*_socket*/, Buffer* /*_buffer*/, int /*_errorCode*/)> ReadHandler;
-typedef Delegate<void (Socket* /*_socket*/, Buffer* /*_buffer*/, int /*_errorCode*/)> WriteHandler;
-typedef Delegate<void (Socket* /*_socket*/, Buffer* /*_buffer*/, int /*_errorCode*/)> AcceptHandler;
+#include "OperationManager.h"
 
 class Socket
 {
@@ -19,6 +13,7 @@ public:
     void AsyncRead(ReadHandler* _handler, const Buffer& _buffer);
     void AsyncWrite(WriteHandler* _handler, const Buffer& _buffer);
 
+    void Close();
     void SetPeerAddr(const PeerAddr& _peerAddr){ m_PeerAddr = _peerAddr; }
     SOCKET GetSocket() { return m_Socket;         }
     const char* GetIp(){ return m_PeerAddr.Ip();  }
@@ -27,6 +22,7 @@ public:
 private:
     SOCKET   m_Socket;
     PeerAddr m_PeerAddr;
+    OperationManager m_OperationManager;
 };
 
 #endif

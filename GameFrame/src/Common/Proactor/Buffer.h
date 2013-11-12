@@ -4,13 +4,15 @@
 #define BUFFER_SIZE 4096
 
 typedef struct _Buffer {
-    _Buffer(char* _buf, int _len)
+    _Buffer(char* _buf, int _maxLen, int _transferLen = 0)
         : m_Buffer(_buf)
-        , m_Len(_len)
+        , m_MaxLen(_maxLen)
+        , m_TransferLen(_transferLen)
     {}
 
     char* m_Buffer;
-    int   m_Len;
+    int   m_MaxLen;
+    int   m_TransferLen;
 }Buffer;
 
 #endif

@@ -3,8 +3,8 @@
 #include "UnitTest.h"
 
 #include "./Proactor/Service.h"
-#include "./Proactor/NetWork.h"
 #include "./Proactor/WinSockStart.h"
+#include "./Proactor/TcpServer.h"
 
 int main(int argc, char* argv[])
 {

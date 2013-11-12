@@ -21,6 +21,12 @@
 #include <memory.h>
 #include <assert.h>
 
+#include <vector>
+#include <list>
+#include <map>
+#include <set>
+#include <algorithm>
+
 typedef unsigned char	UCHAR;		
 typedef char			CHAR;		
 typedef unsigned int	UINT;		
@@ -29,7 +35,8 @@ typedef unsigned short	USHORT;
 typedef short			SHORT;		
 typedef unsigned long	ULONG;		
 typedef long			LONG;		
-typedef float			FLOAT;		
+typedef float			FLOAT;	
+typedef unsigned long long ULONGLONG;
 
 typedef UCHAR			uchar;
 typedef USHORT			ushort;
@@ -37,6 +44,7 @@ typedef UINT			uint;
 typedef ULONG			ulong;
 typedef INT				BOOL;
 typedef UCHAR			BYTE;
+typedef ULONGLONG       ulonglong;
 
 #ifndef TRUE
     #define TRUE 1

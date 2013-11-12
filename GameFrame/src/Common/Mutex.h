@@ -25,10 +25,4 @@ private:
     Mutex& m_Mutex;
 };
 
-class SpinLock
-{
-public:
-    SpinLock()
-};
-
 #endif

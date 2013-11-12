@@ -3,12 +3,12 @@
 
 #include "Compact.h"
 #include "MemAlloc.h"
+#include "Mutex.h"
 
 template<class T>
 class ObjectPoolImpl
 {
 public:
-
     ObjectPoolImpl()
     {}
 
@@ -80,6 +80,7 @@ private:
 template<class T>
 class ObjectPoolWithLock
 {
+public:
     ObjectPoolWithLock()
         : m_pImpl(new ObjectPoolImpl<T>())
     {}
@@ -93,34 +94,34 @@ class ObjectPoolWithLock
 
     T* Pop() 
     {
-        AutoLock(m_Mutex);
-        m_pImpl->Pop(); 
+        AutoLock lock(m_Mutex);
+        return m_pImpl->Pop(); 
     }
 
     template<class Arg1>
     T* Pop(Arg1 p1)
     {
-        AutoLock(m_Mutex);
-        m_pImpl->Pop(p1);
+        AutoLock lock(m_Mutex);
+        return m_pImpl->Pop(p1);
     }
 
     template<class Arg1, class Arg2, class Arg3>
     T* Pop(Arg1 p1, Arg2 p2, Arg3 p3)
     {
-        AutoLock(m_Mutex);
-        m_pImpl->Pop(p1, p2, p3);
+        AutoLock lock(m_Mutex);
+        return  m_pImpl->Pop(p1, p2, p3);
     }
 
     template<class Arg1, class Arg2>
     T* Pop(Arg1 p1, Arg2 p2)
     {
-        AutoLock(m_Mutex);
-        m_pImpl->Pop(p1, p2);
+        AutoLock lock(m_Mutex);
+        return m_pImpl->Pop(p1, p2);
     }
 
     void Push(T* p) 
     {
-        AutoLock(m_Mutex);
+        AutoLock lock(m_Mutex);
         m_pImpl->Push(p); 
     }
 private:

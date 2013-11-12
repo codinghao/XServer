@@ -2,7 +2,10 @@
 #define _TCP_SERVER_H_
 
 #include "Socket.h"
+#include "ConnectionManager.h"
 
+class Service;
+class Acceptor;
 class TcpServer
 {
 public:
@@ -12,6 +15,7 @@ public:
 private:
     Acceptor* m_Acceptor;
     AcceptHandler m_AcceptHandler;
+    ConnnectionManager m_ConnectionManager;
 };
 
 #endif

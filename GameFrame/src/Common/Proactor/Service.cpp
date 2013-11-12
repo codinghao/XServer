@@ -44,6 +44,7 @@ void Service::ServiceRun()
             continue ;
         }
         Operation* pOperation = static_cast<Operation*>(pOverLapped);
-        pOperation->DoInvoke(nBytesTransferred, errorCode);
+        pOperation->DoCompletion(nBytesTransferred, errorCode);
+        pOperation->DoDestory(errorCode);
     }
 }

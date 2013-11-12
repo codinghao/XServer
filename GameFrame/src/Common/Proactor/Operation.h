@@ -1,17 +1,19 @@
-#ifndef _OPERATOR_H_
-#define _OPERATOR_H_
+#ifndef _OPERATION_H_
+#define _OPERATION_H_
 
-#include "Socket.h"
+#include "Compact.h"
 
 class Operation;
 
-typedef void (*InvokeFunc)(Operation* _this, int _transferBytes, int _errorCode);
+typedef void (*CompletionFunc)(Operation* _this, int _transferBytes, int _errorCode);
+typedef void (*DestroyFunc)(Operation* _this, int _errorCode);
 
 class Operation : public OVERLAPPED 
 {
 public:
-    Operation(InvokeFunc _invokeFunc)
-        : m_InvokeFunc(_invokeFunc)
+    Operation(CompletionFunc _completionFunc, DestroyFunc _DestoryFunc)
+        : m_CompletionFunc(_completionFunc)
+        , m_DestoryFunc(_DestoryFunc)
     {
         Internal = 0;
         InternalHigh = 0;
@@ -23,47 +25,19 @@ public:
     ~Operation()
     {}
 
-    void DoInvoke(int _transferBytes, int _errorCode) 
+    void DoCompletion(int _transferBytes, int _errorCode) 
     {
-        m_InvokeFunc(this, _transferBytes, _errorCode);
+        m_CompletionFunc(this, _transferBytes, _errorCode);
+    }
+
+    void DoDestory(int _errorCode)
+    {
+        m_DestoryFunc(this, _errorCode);
     }
 
 private:
-    InvokeFunc m_InvokeFunc;
+    CompletionFunc m_CompletionFunc;
+    DestroyFunc m_DestoryFunc;
 };
-
-class ReadOperation : public Operation
-{
-public:
-    ReadOperation(Socket* _socket, const Buffer& _buffer, ReadHandler* _handler);
-    static void DoCompletion(Operation* _this, int _transferBytes, int _errorCode);
-public:
-    Socket* m_Socket;
-    Buffer  m_Buffer;
-    ReadHandler* m_Handler;
-};
-
-class WriteOperation : public Operation
-{
-public:
-    WriteOperation(Socket* _socket, const Buffer& _buffer, WriteHandler* _handler);
-    static void DoCompletion(Operation* _this, int _transferBytes, int _errorCode);
-public:
-    Socket* m_Socket;
-    Buffer  m_Buffer;
-    WriteHandler* m_Handler;
-};
-
-class AcceptOperation : public Operation
-{
-public:
-    AcceptOperation(Socket* _socket, const Buffer& _buffer, AcceptHandler* _handler);
-    static void DoCompletion(Operation* _this, int _transferBytes, int _errorCode);
-public:
-    Socket* m_Socket;
-    Buffer  m_Buffer;
-    AcceptHandler* m_Handler;
-};
-
 
 #endif

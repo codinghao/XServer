@@ -432,9 +432,27 @@
 				<File
 					RelativePath="..\src\Common\Proactor\ConnectionManager.cpp"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\Common\Proactor\ConnectionManager.h"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCustomBuildTool"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\src\Common\Proactor\EventHandler.h"
 					>
 				</File>
 				<File
@@ -460,10 +478,6 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\src\Common\Proactor\Operation.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\src\Common\Proactor\Operation.h"
 					>
 					<FileConfiguration
@@ -473,6 +487,22 @@
 							Name="VCCustomBuildTool"
 						/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\src\Common\Proactor\OperationManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Common\Proactor\OperationManager.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Common\Proactor\OperationSet.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\Common\Proactor\OperationSet.h"
+					>
 				</File>
 				<File
 					RelativePath="..\src\Common\Proactor\PeerAddr.h"
@@ -511,13 +541,6 @@
 				<File
 					RelativePath="..\src\Common\StreamBuffer.cpp"
 					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\Common\StreamBuffer.h"
