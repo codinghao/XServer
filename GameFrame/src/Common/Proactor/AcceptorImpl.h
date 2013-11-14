@@ -21,7 +21,6 @@ public:
 private:
     Socket*   m_Socket;
     Service*  m_Service;
-    OperationManager m_OperationManager;
     AcceptExFunctor m_AcceptEx;
     GetAcceptExSockaddrsFunctor m_GetSockAddr;
 };

@@ -6,7 +6,7 @@
 class TcpConnection : public Socket
 {
 public:
-    TcpConnection();
+    TcpConnection(BreakenHandler& _breakenHandler);
     ~TcpConnection();
     
     void OnRead(Socket* _socket, Buffer* _buffer, int _errorCode);
@@ -17,6 +17,11 @@ public:
 private:
     ulonglong m_ConnId;
     ReadHandler m_ReadHandler;
+    WriteHandler m_WriteHandler;
+    BreakenHandler m_BreakenHandler;
+
+    int m_PendingReadCount;
+    int m_PendingWriteCount;
 };
 
 #endif

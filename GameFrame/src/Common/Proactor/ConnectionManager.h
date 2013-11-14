@@ -3,6 +3,7 @@
 
 #include "Compact.h"
 
+class Socket;
 class TcpConnection;
 
 class ConnnectionManager
@@ -14,7 +15,7 @@ public:
     TcpConnection* CreateTcpConnnectionFanctory();    
 
     void AddTcpConnection(TcpConnection* _conn);
-    void RemoveTcpConnection(TcpConnection* _conn);
+    void RemoveTcpConnection(Socket* _socket);
 private:
     void _DeleteTcpConnection(TcpConnection* _conn);
 

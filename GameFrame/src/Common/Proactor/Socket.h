@@ -14,6 +14,7 @@ public:
     void AsyncWrite(WriteHandler* _handler, const Buffer& _buffer);
 
     void Close();
+
     void SetPeerAddr(const PeerAddr& _peerAddr){ m_PeerAddr = _peerAddr; }
     SOCKET GetSocket() { return m_Socket;         }
     const char* GetIp(){ return m_PeerAddr.Ip();  }
@@ -22,7 +23,6 @@ public:
 private:
     SOCKET   m_Socket;
     PeerAddr m_PeerAddr;
-    OperationManager m_OperationManager;
 };
 
 #endif

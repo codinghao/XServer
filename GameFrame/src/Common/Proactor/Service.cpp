@@ -39,7 +39,7 @@ void Service::ServiceRun()
         ::WSASetLastError(0);
         BOOL ok = ::GetQueuedCompletionStatus(m_Hanlde, &nBytesTransferred, &pCompletionKey, (LPOVERLAPPED*)&pOverLapped, INFINITE);
         DWORD errorCode = ::WSAGetLastError();
-        if (!ok || pOverLapped == NULL)
+        if (!ok && pOverLapped == NULL)
         {
             continue ;
         }

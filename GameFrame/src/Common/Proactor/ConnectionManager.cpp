@@ -23,7 +23,7 @@ ConnnectionManager::~ConnnectionManager()
 
 TcpConnection* ConnnectionManager::CreateTcpConnnectionFanctory()
 {
-    TcpConnection* pConn = new TcpConnection();
+    TcpConnection* pConn = new TcpConnection(BreakenHandler(this, &ConnnectionManager::RemoveTcpConnection));
     m_PendingConnList.push_back(pConn);
     
     return pConn;
@@ -38,11 +38,16 @@ void ConnnectionManager::AddTcpConnection(TcpConnection* _conn)
     m_ConnMap.insert(std::make_pair(m_ConnCount++, _conn));
 }
 
-void ConnnectionManager::RemoveTcpConnection(TcpConnection* _conn)
+void ConnnectionManager::RemoveTcpConnection(Socket* _socket)
 {
-    assert(_conn != NULL);
+    assert(_socket != NULL);
+    
+    TcpConnection* pConn = static_cast<TcpConnection*>(_socket);
+    
+    std::cout << "Connection breaken : IP[" << pConn->GetIp() << "], PORT[" << pConn->GetPort() << "]" << std::endl; 
 
-    m_ConnMap.erase(_conn->GetConnId());
+    m_ConnMap.erase(pConn->GetConnId());
+    _DeleteTcpConnection(pConn);
 }
 
 void ConnnectionManager::_DeleteTcpConnection(TcpConnection* _conn)

@@ -22,4 +22,6 @@ private:
     DestoryHandler m_DestoryHandler;
 };
 
+static OperationManager gs_OperationManager;
+
 #endif

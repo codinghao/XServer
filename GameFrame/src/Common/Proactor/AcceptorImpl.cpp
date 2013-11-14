@@ -49,16 +49,15 @@ void AcceptorImpl::AsyncAccept(Socket* _socket, AcceptHandler* _handler, const B
 {
     DWORD dwBytes = 0;
 
-    Operation* acceptOp = m_OperationManager.CreateAcceptOperationFactory(_socket, _buffer, _handler);
+    Operation* acceptOp = gs_OperationManager.CreateAcceptOperationFactory(_socket, _buffer, _handler);
     if (!m_AcceptEx(m_Socket->GetSocket(), _socket->GetSocket(), _buffer.m_Buffer, _buffer.m_MaxLen - ((PEER_ADDR_SIZE+16)*2), 
         (PEER_ADDR_SIZE+16), (PEER_ADDR_SIZE+16), &dwBytes, (LPOVERLAPPED)acceptOp))
     {
         DWORD errorCode = WSAGetLastError();
         if (errorCode != ERROR_IO_PENDING)
         {
-            m_OperationManager.OnDestory(acceptOp, errorCode);
+            gs_OperationManager.OnDestory(acceptOp, errorCode);
             fprintf(stderr, "Post AcceptEx request failed, error code : %d", errorCode);
-            m_Socket->Close();
             return ;
         }
     }

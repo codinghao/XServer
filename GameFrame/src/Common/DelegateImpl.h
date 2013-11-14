@@ -88,6 +88,7 @@ public:
     }
 
     Delegate(const Delegate& _delegate)
+        : m_pImpl(NULL)
     {
         *this = _delegate;
     }

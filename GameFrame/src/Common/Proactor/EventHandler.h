@@ -10,6 +10,8 @@ class Operation;
 typedef Delegate<void (Socket* /*_socket*/, Buffer* /*_buffer*/, int /*_errorCode*/)> ReadHandler;
 typedef Delegate<void (Socket* /*_socket*/, Buffer* /*_buffer*/, int /*_errorCode*/)> WriteHandler;
 typedef Delegate<void (Socket* /*_socket*/, Buffer* /*_buffer*/, int /*_errorCode*/)> AcceptHandler;
+
 typedef Delegate<void (Operation* /*_operation*/, int /*_errorCode*/)> DestoryHandler;
+typedef Delegate<void (Socket* /*_socket*/)> BreakenHandler;
 
 #endif
