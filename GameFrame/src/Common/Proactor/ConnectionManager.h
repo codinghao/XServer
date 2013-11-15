@@ -23,7 +23,6 @@ private:
     ulonglong m_ConnCount;
     std::map<ulonglong, TcpConnection*> m_ConnMap;
     std::list<TcpConnection*> m_PendingConnList;
-    std::queue<TcpConnection*> m_ConnPool;
 };
 
 #endif
