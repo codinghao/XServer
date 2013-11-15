@@ -13,14 +13,6 @@ public:
     {
         strcpy(m_Ip, _ip);
 
-        WSADATA wsaData;
-        int ret= WSAStartup(MAKEWORD(2,2), &wsaData);
-        if (NO_ERROR != ret)
-        {
-            fprintf(stderr, "Failed call WSAStartup function.");
-            return ;
-        }
-
         m_Scoket = socket(AF_INET, SOCK_STREAM, 0);
         if (m_Scoket == INVALID_SOCKET)
             std::cerr << "create socket faild!" << std::endl;
@@ -32,7 +24,8 @@ public:
         addr.sin_family = AF_INET;
         addr.sin_addr.s_addr = ::inet_addr(m_Ip);
         addr.sin_port = ntohs(m_Port);
-        ::connect(m_Scoket, (const sockaddr*)&addr, sizeof(sockaddr));
+        if (SOCKET_ERROR == ::connect(m_Scoket, (const sockaddr*)&addr, sizeof(sockaddr)))
+            std::cerr << "connnect error : " << WSAGetLastError() << std::endl;
 
         while(true)
         {

@@ -21,8 +21,6 @@ TcpServer::~TcpServer()
 
 void TcpServer::OnAccept(Socket* _socket, Buffer* _buffer, int _errorCode)
 {
-    MemAllocT.Dealloc(_buffer->m_Buffer, _buffer->m_MaxLen);
-
     m_Acceptor->OnAccepted(_socket, *_buffer, _errorCode);
 
     std::cout << "Accepted : " << _socket->GetIp() << " " << _socket->GetPort() << std::endl;
