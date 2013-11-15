@@ -17,14 +17,14 @@ void main(int argc, char* argv[])
 
     std::list<Connection*> connList;
 
-    for (int i = 0; i < 500; i ++)
+    for (int i = 0; i < 700; i ++)
     {
         Connection* pConn = new Connection("127.0.0.1", 6020);
         pConn->Start();
         connList.push_back(pConn);
 
-        if ( i % 20 == 0)
-            Sleep(2000);
+        //if ( i % 20 == 0)
+        //    Sleep(2000);
     }
 
     char buf[512] = {0};

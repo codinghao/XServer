@@ -26,6 +26,7 @@
 #include <map>
 #include <set>
 #include <algorithm>
+#include <queue>
 
 typedef unsigned char	UCHAR;		
 typedef char			CHAR;		

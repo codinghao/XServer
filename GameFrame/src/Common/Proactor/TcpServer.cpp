@@ -8,7 +8,7 @@ TcpServer::TcpServer(Service* _service, PeerAddr& _peerAddr)
 {
     m_AcceptHandler = AcceptHandler(this, &TcpServer::OnAccept);
     m_Acceptor->AsyncAccept(static_cast<Socket*>(m_ConnectionManager.CreateTcpConnnectionFanctory()), 
-        &m_AcceptHandler, Buffer((char*)MemAllocT.Alloc(BUFFER_SIZE), BUFFER_SIZE));
+        &m_AcceptHandler, Buffer((char*)MemAllocT.Alloc(((PEER_ADDR_SIZE+16)*2)), ((PEER_ADDR_SIZE+16)*2)));
 }
 
 TcpServer::~TcpServer()
@@ -29,6 +29,8 @@ void TcpServer::OnAccept(Socket* _socket, Buffer* _buffer, int _errorCode)
     m_ConnectionManager.AddTcpConnection(pConn);
     pConn->OnRead(_socket, _buffer, _errorCode);
 
+    std::cout << pConn->GetConnId() << std::endl;
+
     m_Acceptor->AsyncAccept(static_cast<Socket*>(m_ConnectionManager.CreateTcpConnnectionFanctory()), 
-        &m_AcceptHandler, Buffer((char*)MemAllocT.Alloc(BUFFER_SIZE), BUFFER_SIZE));
+        &m_AcceptHandler, Buffer((char*)MemAllocT.Alloc(((PEER_ADDR_SIZE+16)*2)), ((PEER_ADDR_SIZE+16)*2)));
 }

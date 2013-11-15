@@ -4,7 +4,10 @@
 ConnnectionManager::ConnnectionManager()
     : m_ConnCount(0)
 {
-
+    for (int i = 0; i < 10000; i ++)
+    {
+        m_ConnPool.push(new TcpConnection(BreakenHandler(this, &ConnnectionManager::RemoveTcpConnection)));
+    }
 }
 
 ConnnectionManager::~ConnnectionManager()
@@ -23,8 +26,10 @@ ConnnectionManager::~ConnnectionManager()
 
 TcpConnection* ConnnectionManager::CreateTcpConnnectionFanctory()
 {
-    TcpConnection* pConn = new TcpConnection(BreakenHandler(this, &ConnnectionManager::RemoveTcpConnection));
+    TcpConnection* pConn = m_ConnPool.front();
     m_PendingConnList.push_back(pConn);
+
+    m_ConnPool.pop();
     
     return pConn;
 }
@@ -35,6 +40,8 @@ void ConnnectionManager::AddTcpConnection(TcpConnection* _conn)
 
     std::remove_if(m_PendingConnList.begin(), m_PendingConnList.end(), std::bind1st(std::equal_to<TcpConnection*>(), _conn));
     
+    _conn->SetConnId(m_ConnCount);
+
     m_ConnMap.insert(std::make_pair(m_ConnCount++, _conn));
 }
 
