@@ -2,9 +2,8 @@
 #include "MainService.h"
 #include "UnitTest.h"
 
-#include "./Proactor/Service.h"
-#include "./Proactor/WinSockStart.h"
-#include "./Proactor/TcpServer.h"
+#include "./net/Service.h"
+#include "./net/TcpServer.h"
 
 int main(int argc, char* argv[])
 {
