@@ -38,3 +38,14 @@ AutoLock::~AutoLock()
 {
     m_Mutex.UnLock();
 }
+
+GurdLock::GurdLock(Mutex& mtx)
+    : m_Mutex(mtx)
+{
+    m_Mutex.Lock();
+}
+
+GurdLock::~GurdLock()
+{
+    m_Mutex.UnLock();
+}

@@ -1,13 +1,7 @@
 #ifndef _ATOMIC_H_
 #define _ATOMIC_H_
 
-class Atomic
-{
-public:
-    Atomic();
-    ~Atomic();
-private:
-
-};
+#define AtomicCountInc(count) ::InterlockedIncrement(&count)
+#define AtomicCountDec(count) ::InterlockedDecrement(&count)
 
 #endif

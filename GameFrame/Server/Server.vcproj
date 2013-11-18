@@ -288,10 +288,6 @@
 				Name="os"
 				>
 				<File
-					RelativePath="..\src\Common\Atomic.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\src\Common\Atomic.h"
 					>
 				</File>
@@ -397,7 +393,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\Server\MsgHandler.h"
+				RelativePath="..\src\Server\NetService.h"
 				>
 			</File>
 			<File

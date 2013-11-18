@@ -25,4 +25,14 @@ private:
     Mutex& m_Mutex;
 };
 
+class GurdLock
+{
+public:
+    GurdLock(Mutex& mtx);
+    ~GurdLock();
+private:
+    Mutex& m_Mutex;
+};
+
+
 #endif

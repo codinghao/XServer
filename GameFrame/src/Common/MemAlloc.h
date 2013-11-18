@@ -143,6 +143,7 @@ private:
     Mutex m_Mutex;
 };
 
-#define  MemAllocT MemAlloc::Instance() 
+#define  MemAllocT MemAlloc::Instance()
+#define  MemAllocWithLockT MemAllocWithLock::Instance()
 
 #endif

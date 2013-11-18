@@ -1,9 +1,7 @@
 #include "Compact.h"
 #include "MainService.h"
 #include "UnitTest.h"
-
-#include "./net/Service.h"
-#include "./net/TcpServer.h"
+#include "NetService.h"
 
 int main(int argc, char* argv[])
 {
@@ -12,7 +10,18 @@ int main(int argc, char* argv[])
     Service service;
     TcpServer server(&service, PeerAddr("0.0.0.0", 6020));
 
-    service.ServiceRun();
+    NetService* ns[4];
+
+    for (int i = 0; i < 4; i ++)
+    {
+        ns[i] = new NetService(service);
+        ns[i]->Start();
+    }
+
+    for (int i = 0; i < 4; i ++)
+    {
+        ns[i]->Join();
+    }
 
     return 0;
 }
