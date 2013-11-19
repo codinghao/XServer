@@ -15,10 +15,10 @@ public:
     void AsyncRecv();
     void AsyncSend();
 
-    ulonglong GetConnId() { return m_ConnId; }
-    ulonglong SetConnId(ulonglong _id) { return m_ConnId = _id;}
+    long GetConnId() { return m_ConnId; }
+    long SetConnId(long _id) { return m_ConnId = _id;}
 private:
-    ulonglong m_ConnId;
+    long m_ConnId;
     ReadHandler m_ReadHandler;
     WriteHandler m_WriteHandler;
     BreakenHandler m_BreakenHandler;

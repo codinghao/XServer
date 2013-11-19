@@ -25,13 +25,7 @@ void TcpConnection::OnRead(Socket* _socket, Buffer* _buffer, int _errorCode)
 
     if (_errorCode != 0)
     {
-        if (InterlockedCompareExchange(&m_PendingReadCount, -1, 0) == 0)
-        {
-            if (InterlockedCompareExchange(&m_PendingWriteCount, -1, 0) == 0)
-                m_BreakenHandler(_socket);
-            else
-                InterlockedExchange(&m_PendingReadCount, 0);
-        }
+
     }
     else
     {
@@ -48,14 +42,8 @@ void TcpConnection::AsyncRecv()
 {
     Buffer buffer = Buffer((char*)MemAllocWithLockT.Alloc(BUFFER_SIZE), BUFFER_SIZE);
 
-    if (AsyncRead(&m_ReadHandler, buffer))
-    {
-        InterlockedIncrement(&m_PendingReadCount);
-    }
-    else 
-    {
+    if (!AsyncRead(&m_ReadHandler, buffer))
         MemAllocWithLockT.Dealloc(buffer.m_Buffer, buffer.m_MaxLen);
-    }
 }
 
 void TcpConnection::AsyncSend()

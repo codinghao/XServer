@@ -17,7 +17,7 @@ void main(int argc, char* argv[])
 
     std::list<Connection*> connList;
 
-    for (int i = 0; i < 1000; i ++)
+    for (int i = 0; i < 3000; i ++)
     {
         Connection* pConn = new Connection("127.0.0.1", 6020);
         pConn->Start();

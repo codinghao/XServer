@@ -25,11 +25,13 @@ void TcpServer::OnAccept(Socket* _socket, Buffer* _buffer, int _errorCode)
 {
     m_Acceptor->OnAccepted(_socket, *_buffer, _errorCode);
 
-    std::cout << "Accepted : " << _socket->GetIp() << " " << _socket->GetPort() << std::endl;
+    //std::cout << "Accepted : " << _socket->GetIp() << " " << _socket->GetPort() << std::endl;
 
     TcpConnection* pConn = static_cast<TcpConnection*>(_socket);
     m_ConnectionManager.AddTcpConnection(pConn);
     pConn->AsyncRecv();
+
+    std::cout << pConn->GetConnId() << std::endl;
 
     AsyncAccept();
 }
