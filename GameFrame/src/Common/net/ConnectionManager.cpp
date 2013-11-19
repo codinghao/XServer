@@ -11,20 +11,18 @@ ConnnectionManager::ConnnectionManager()
 ConnnectionManager::~ConnnectionManager()
 {
     std::for_each(m_PendingConnList.begin(), m_PendingConnList.end(), 
-        std::bind1st(std::mem_fun1(&ConnnectionManager::_DeleteTcpConnection), this));
+        std::bind1st(std::mem_fun1(&ConnnectionManager::DeleteTcpConnection), this));
 
-    for (std::map<ulonglong, TcpConnection*>::iterator it = m_ConnMap.begin(); it != m_ConnMap.end(); ++ it)
-    {
-        _DeleteTcpConnection(it->second);
-    }
+    std::for_each(m_ConnectedSet.begin(), m_ConnectedSet.end(),
+        std::bind1st(std::mem_fun1(&ConnnectionManager::DeleteTcpConnection), this));
 
     m_PendingConnList.clear();
-    m_ConnMap.clear();
+    m_ConnectedSet.clear();
 }
 
-TcpConnection* ConnnectionManager::CreateTcpConnnectionFanctory()
+TcpConnection* ConnnectionManager::CreateTcpConnnectionFanctory(ReadHandler& _readHandler, WriteHandler& _writeHandler)
 {
-    TcpConnection* pConn = new TcpConnection(BreakenHandler(this, &ConnnectionManager::RemoveTcpConnection));
+    TcpConnection* pConn = new TcpConnection(_readHandler, _writeHandler);
 
     m_PendingConnListMutex.Lock();
     m_PendingConnList.push_back(pConn);
@@ -44,26 +42,26 @@ void ConnnectionManager::AddTcpConnection(TcpConnection* _conn)
     _conn->SetConnId(AtomicCountInc(m_ConnCount));
 
     m_ConnMapMutex.Lock();
-    m_ConnMap.insert(std::make_pair(_conn->GetConnId(), _conn));
+    m_ConnectedSet.insert(_conn);
     m_ConnMapMutex.UnLock();
 }
 
-void ConnnectionManager::RemoveTcpConnection(Socket* _socket)
+bool ConnnectionManager::FindAndRemoveConnection(TcpConnection* _conn)
 {
-    assert(_socket != NULL);
-    
-    TcpConnection* pConn = static_cast<TcpConnection*>(_socket);
-    
-    std::cout << "Connection breaken : IP[" << pConn->GetIp() << "], PORT[" << pConn->GetPort() << "]" << std::endl;
-
     m_ConnMapMutex.Lock();
-    m_ConnMap.erase(pConn->GetConnId());
+    std::set<TcpConnection*>::iterator it = m_ConnectedSet.find(_conn);
+    if (it == m_ConnectedSet.end())
+    {
+        m_ConnMapMutex.UnLock();
+        return false;
+    }
+    m_ConnectedSet.erase(_conn);
     m_ConnMapMutex.UnLock();
 
-    _DeleteTcpConnection(pConn);
+    return true;
 }
 
-void ConnnectionManager::_DeleteTcpConnection(TcpConnection* _conn)
+void ConnnectionManager::DeleteTcpConnection(TcpConnection* _conn)
 {
     delete _conn;
 }

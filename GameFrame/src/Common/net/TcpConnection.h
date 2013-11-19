@@ -6,11 +6,11 @@
 class TcpConnection : public Socket
 {
 public:
-    TcpConnection(BreakenHandler& _breakenHandler);
+    TcpConnection(ReadHandler& _readHandler, WriteHandler& _writeHandler);
     ~TcpConnection();
     
-    void OnRead(Socket* _socket, Buffer* _buffer, int _errorCode);
-    void OnWrite(Socket* _socket, Buffer* _buffer, int _errorCode);
+    void OnRead(Buffer* _buffer);
+    void OnWrite(Buffer* _buffer);
 
     void AsyncRecv();
     void AsyncSend();
@@ -21,9 +21,6 @@ private:
     long m_ConnId;
     ReadHandler m_ReadHandler;
     WriteHandler m_WriteHandler;
-    BreakenHandler m_BreakenHandler;
-    long volatile m_PendingReadCount;
-    long volatile m_PendingWriteCount;
 };
 
 #endif

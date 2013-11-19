@@ -1,8 +1,6 @@
 #include "Socket.h"
 #include "Operation.h"
 
-#define SAFE_DELETE_SOCKET(s) if (s != INVALID_SOCKET) { closesocket(s); s = INVALID_SOCKET; }
-
 Socket::Socket()
     : m_Socket(INVALID_SOCKET) 
 {
@@ -15,7 +13,7 @@ Socket::Socket()
 
 Socket::~Socket()
 {
-    SAFE_DELETE_SOCKET(m_Socket);
+    Close();
 }
 
 bool Socket::AsyncRead(ReadHandler* _handler, const Buffer& _buffer)
@@ -68,5 +66,7 @@ bool Socket::AsyncWrite(WriteHandler* _handler, const Buffer& _buffer)
 
 void Socket::Close()
 {
-    SAFE_DELETE_SOCKET(m_Socket);
+    if (m_Socket != INVALID_SOCKET)
+        shutdown(m_Socket, 2);
+    closesocket(m_Socket);
 }

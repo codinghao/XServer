@@ -3,6 +3,7 @@
 
 #include "Compact.h"
 #include "Mutex.h"
+#include "EventHandler.h"
 
 class Socket;
 class TcpConnection;
@@ -13,16 +14,15 @@ public:
     ConnnectionManager();
     ~ConnnectionManager();
 
-    TcpConnection* CreateTcpConnnectionFanctory();    
+    TcpConnection* CreateTcpConnnectionFanctory(ReadHandler& _readHandler, WriteHandler& _writeHandler);    
 
     void AddTcpConnection(TcpConnection* _conn);
-    void RemoveTcpConnection(Socket* _socket);
-private:
-    void _DeleteTcpConnection(TcpConnection* _conn);
+    bool FindAndRemoveConnection(TcpConnection* _conn);
+    void DeleteTcpConnection(TcpConnection* _conn);
 
 private:
-    long volatile m_ConnCount; 
-    std::map<ulonglong, TcpConnection*> m_ConnMap;
+    long volatile m_ConnCount;
+    std::set<TcpConnection*> m_ConnectedSet;
     std::list<TcpConnection*> m_PendingConnList;
     Mutex m_PendingConnListMutex;
     Mutex m_ConnMapMutex;

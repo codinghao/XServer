@@ -208,10 +208,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\Common\net\EventRoute.h"
-					>
-				</File>
-				<File
 					RelativePath="..\src\Common\net\NoneCopyable.h"
 					>
 				</File>

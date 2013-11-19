@@ -3,11 +3,9 @@
 
 #include "PeerAddr.h"
 #include "Buffer.h"
-#include "..\Delegate.h"
+#include "EventHandler.h"
 
 class Socket;
-typedef Delegate<void (Socket* /*_socket*/, Buffer* /*_buffer*/, int /*_errorCode*/)> AcceptHandler;
-
 class Service;
 class AcceptorImpl;
 class Acceptor
